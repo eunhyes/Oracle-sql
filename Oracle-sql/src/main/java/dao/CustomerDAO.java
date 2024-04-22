@@ -34,8 +34,8 @@ public class CustomerDAO {
 			int row = 0;
 			
 			Connection conn = DBHelper.getConnection();
-			String sql = "delete from customer"
-					+ " where mail = ? and pw = ?";
+			String sql = "DELETE FROM customer"
+					+ " WHERE mail = ? AND pw = ?";
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setString(1, mail);
 			stmt.setString(2, pw);
@@ -53,9 +53,9 @@ public class CustomerDAO {
 			HashMap<String, String> map = null;
 			
 			Connection conn = DBHelper.getConnection();
-			String sql = "select mail, name"
-					+ " from customer"
-					+ " where mail = ? and pw = ?";
+			String sql = "SELECT mail, name"
+					+ " FROM customer"
+					+ " WHERE mail = ? AND pw = ?";
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setString(1, mail);
 			stmt.setString(2, pw);
@@ -82,9 +82,9 @@ public class CustomerDAO {
 			int row = 0;
 			
 			Connection conn = DBHelper.getConnection();
-			String sql = "insert into customer("
+			String sql = "INSERT INTO customer("
 					+ "mail, pw, name, birth, gender,"
-					+ " update_date, create_date) values ("
+					+ " update_date, create_date) VALUES ("
 					+ "?,?,?,?,?, sysdate, sysdate)";
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setString(1, mail);
@@ -107,9 +107,9 @@ public class CustomerDAO {
 			boolean result = false;
 			
 			Connection conn = DBHelper.getConnection();
-			String sql = "select mail"
-					+ " from customer"
-					+ " where mail = ?";
+			String sql = "SELECT mail"
+					+ " FROM customer"
+					+ " WHERE mail = ?";
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setString(1, mail);
 			ResultSet rs = stmt.executeQuery();
