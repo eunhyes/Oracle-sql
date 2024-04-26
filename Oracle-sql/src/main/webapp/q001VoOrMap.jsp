@@ -6,13 +6,11 @@
 <!-- Controller(컨트롤러) -->
 
 <%
-	// DAO호출로 모델 반환
+	// DAO 호출
 	ArrayList<Dept> deptList = DeptDAO.selectDeptList();
 	ArrayList<Emp> empList = EmpDAO.selectEmpList();
-	ArrayList<HashMap<String, Object>> deptOnOffList 
-								= DeptDAO.selectDeptOnOffList();
-	ArrayList<HashMap<String, Object>> empAndDeptList 
-								= EmpDAO.selectEmpAndDeptList();
+	ArrayList<HashMap<String, Object>> deptOnOffList = DeptDAO.selectDeptOnOffList();
+	ArrayList<HashMap<String, Object>> empAndDeptList = EmpDAO.selectEmpAndDeptList();
 %>
 
 <!-- View(뷰) -->

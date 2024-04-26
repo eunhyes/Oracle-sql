@@ -3,9 +3,9 @@
 <%@ page import = "java.util.*" %>
 <!-- Model -->
 <%
-	ArrayList<Integer> list = EmpDAO.selectDeptNoList();
+	ArrayList<Integer> list = DeptDAO.selectDeptNoList();
 
- 	ArrayList<HashMap<String, Integer>> groupByList = EmpDAO.selectDeptNoCntList();
+ 	ArrayList<HashMap<String, Integer>> groupByList = DeptDAO.selectDeptNoCntList();
 %>
 
 <!-- View -->

@@ -78,7 +78,7 @@ FROM dual;
 SELECT deptno, dname, loc, ROWNUM
 FROM dept -- 1)
 WHERE ROWNUM < 3; -- 2)
-/* where 절이 생성될때 rownum이 1부터 생성되므로(행이 조건에 만족하면 다음 2, 3, 4....증가) 조건에 맞는 행이 하나도 없다  */
+/* where 절이 생성될때 rownum이 1부터 생성되므로(행이 조건에 만족하면 다음 2, 3, 4, ...) 조건에 맞는 행 존재X  */
 
 
 -- 함수
@@ -120,11 +120,14 @@ ORDER BY 근속년도 DESC; -- order절에서는 별칭 사용O
 SELECT ename, sal, comm, sal + comm 연봉
 FROM emp;
 
-SELECT ename, sal, comm, NVL(comm,0) 연봉 
+SELECT ename, sal, comm, NVL(comm, 0) 연봉 
 -- NVL(비교값, 치환값) 비교값이 null이면 치환값으로 출력 혹은 원래값으로
--- comm이 null이면 연봉은 0으로 출력
+-- NVL(comm, 0) -> comm이 null이면 연봉은 0으로 출력하겠다 
 FROM emp;
 
+
+-- CASE 표현식
+-- 1) 값비교 (조건 비교가 힘듦)
 SELECT ename,
         job,
         CASE job
@@ -135,16 +138,41 @@ SELECT ename,
         ELSE '파랑' END color
 FROM emp;
 
+
+-- 2) 조건비교(값비교도 가능) 
 SELECT ename, job, CASE 
-WHEN job = 'PRESIDENT' Then '빨강' 
-WHEN job = 'MANAGER' THEN '주황'
-WHEN job = 'ANALYST' THEN '노랑' 
-WHEN job = 'CLERK' THEN '초록' 
-ELSE '파랑' END color 
-FROM emp 
-ORDER BY (CASE 
-WHEN color = '빨강' THEN 1
-WHEN color = '주황' THEN 2 
-WHEN color = '노랑' THEN 3 
-WHEN color = '초록' THEN 4
-ELSE 5 END) ASC;
+	WHEN job = 'PRESIDENT' THEN '빨강' 
+	WHEN job = 'MANAGER' THEN '주황'
+	WHEN job = 'ANALYST' THEN '노랑' 
+	WHEN job = 'CLERK' THEN '초록' 
+	ELSE '파랑' END color 
+FROM emp;
+
+
+-- ORDER BY절에서는 컬럼 별칭(alias)을 사용할 수 있음
+SELECT ename,
+        job,
+        CASE
+        WHEN job = 'PRESIDENT' Then '빨강'
+        WHEN job = 'MANAGER' THEN '주황'
+        WHEN job = 'ANALYST' THEN '노랑'
+        WHEN job = 'CLERK' THEN '초록'
+        ELSE '파랑' END color -- 3)
+FROM emp -- 1)
+-- WHERE color = '초록'  2) WHERE절은 순서가 SELECT절보다 먼저라 별칭사용 불가능
+ORDER BY color DESC; -- 4) 실행순서가 SELECT절 뒤에 ORDER BY절이 실행되어 별칭사용이 가능 
+
+-- 응용 
+SELECT ename, job, CASE 
+	WHEN job = 'PRESIDENT' THEN '빨강' 
+	WHEN job = 'MANAGER' THEN '주황'
+	WHEN job = 'ANALYST' THEN '노랑' 
+	WHEN job = 'CLERK' THEN '초록' 
+	ELSE '파랑' END color 
+FROM emp
+	ORDER BY (CASE 
+	WHEN color = '빨강' THEN 1
+	WHEN color = '주황' THEN 2 
+	WHEN color = '노랑' THEN 3 
+	WHEN color = '초록' THEN 4
+	ELSE 5 END) ASC;

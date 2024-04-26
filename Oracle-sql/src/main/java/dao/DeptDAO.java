@@ -63,13 +63,14 @@ public class DeptDAO {
 	}
 
 	// Map 사용
+	// q001VoOrMap.jsp
 	public static ArrayList<HashMap<String, Object>> selectDeptOnOffList() throws Exception {
 
 		ArrayList<HashMap<String, Object>> list = new ArrayList<>();
 
 		Connection conn = DBHelper.getConnection();
 		String sql = "SELECT" 
-				+ " deptno deptNo, dname, loc, 'ON' onOff"
+				+ " deptno AS deptNo, dname, loc, 'ON' AS onOff"
 				+ " FROM dept";
 		
 		PreparedStatement stmt = conn.prepareStatement(sql);
@@ -92,78 +93,80 @@ public class DeptDAO {
 	
 	
 	// DEPTNO 뒤에 인원까지 출력하는 메서드(GROUP BY + COUNT 사용)
-		public static ArrayList<HashMap<String, Integer>> selectDeptNoCntList() throws Exception {
+	// q003Distinct.jsp
+	public static ArrayList<HashMap<String, Integer>> selectDeptNoCntList() throws Exception {
+	
+		ArrayList<HashMap<String, Integer>> list = new ArrayList<HashMap<String, Integer>>();
+		Connection conn = DBHelper.getConnection();
 		
-			ArrayList<HashMap<String, Integer>> list = new ArrayList<HashMap<String, Integer>>();
+		String sql = "SELECT deptno AS deptNo, COUNT(*) AS cnt\n"
+				+ " FROM emp\n"
+				+ " WHERE deptno IS NOT NULL\n"
+				+ " GROUP BY deptno\n"
+				+ " ORDER BY deptno ASC";
+		
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		ResultSet rs = stmt.executeQuery();
+		
+		while(rs.next()) {
 			
-			Connection conn = DBHelper.getConnection();
-			
-			String sql = "SELECT deptno deptNo, COUNT(*) cnt\n"
-					+ "FROM emp\n"
-					+ "WHERE deptno IS NOT NULL\n"
-					+ "GROUP BY deptno\n"
-					+ "ORDER BY deptno ASC";
-			
-			PreparedStatement stmt = conn.prepareStatement(sql);
-			ResultSet rs = stmt.executeQuery();
-			
-			while(rs.next()) {
-				
-				HashMap<String, Integer> m = new HashMap<>();
-				m.put("cnt", rs.getInt("cnt"));
-				m.put("deptNo", rs.getInt("deptNo"));
-				list.add(m);
-			}
-			
-			conn.close();
-			return list;
+			HashMap<String, Integer> m = new HashMap<>();
+			m.put("cnt", rs.getInt("cnt"));
+			m.put("deptNo", rs.getInt("deptNo"));
+			list.add(m);
 		}
 		
+		conn.close();
+		return list;
 		
-		// 중복을 제외한 DEPTNO 목록을 출력하는 메서드(DISTINCT 사용)
-		public static ArrayList<Integer> selectDeptNoList() throws Exception {
+	}
 		
-			ArrayList<Integer> list = new ArrayList<>();
+		
+	// 중복을 제외한 DEPTNO 목록을 출력하는 메서드(DISTINCT 사용)
+	// q003Distinct.jsp
+	public static ArrayList<Integer> selectDeptNoList() throws Exception {
+	
+		ArrayList<Integer> list = new ArrayList<>();
+		Connection conn = DBHelper.getConnection();
+		
+		// deptno 이 중복인 것과 null인 것을 제외하고 오름차순 정렬하는 쿼리 
+		String sql = "SELECT DISTINCT deptno AS deptNo"
+				+ " FROM emp"
+				+ " WHERE deptno IS NOT NULL"
+				+ " ORDER BY deptno ASC";
+		
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		ResultSet rs = stmt.executeQuery();
+		
+		while(rs.next()) {
 			
-			Connection conn = DBHelper.getConnection();
+			Integer i = rs.getInt("deptNo"); 
+			// 랩퍼타입과 기본타입 Auto Boxing
+			list.add(i);
 			
-			// deptno 이 중복인 것과 null인 것을 제외하고 오름차순 정렬하는 쿼리 
-			String sql = "SELECT DISTINCT deptno deptNo"
-					+ " FROM emp"
-					+ " WHERE deptno IS NOT NULL"
-					+ " ORDER BY deptno ASC";
-			
-			PreparedStatement stmt = conn.prepareStatement(sql);
-			ResultSet rs = stmt.executeQuery();
-			
-			while(rs.next()) {
-				
-				Integer i = rs.getInt("deptNo"); 
-				// 랩퍼타입과 기본타입 Auto Boxing
-				list.add(i);
-				
-			}
-			
-			conn.close();
-			
-			return list;
 		}
+		
+		conn.close();
+		
+		return list;
+	}
 		
 		
 	// VO 사용
+	// q001VoOrMap.jsp
 	public static ArrayList<Dept> selectDeptList() throws Exception {
 
 		ArrayList<Dept> list = new ArrayList<>();
-
 		Connection conn = DBHelper.getConnection();
 		
 		String sql = "SELECT"
-				+ " deptno deptNO, dname, loc" 
+				+ " deptno AS deptNo, dname, loc"
 				+ " FROM dept";
 		
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		
 		ResultSet rs = stmt.executeQuery();
+		
 		while (rs.next()) {
 			Dept d = new Dept();
 			d.deptNo = rs.getInt("deptNo");
